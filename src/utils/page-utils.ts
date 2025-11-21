@@ -37,18 +37,6 @@ const RESPONSE_SELECTORS = [
   "[role='listitem'][data-message-author]",
 ];
 
-/**
- * Text snippets that indicate a placeholder/loading state
- */
-const PLACEHOLDER_SNIPPETS = [
-  "antwort wird erstellt",
-  "answer wird erstellt",
-  "answer is being created",
-  "answer is being generated",
-  "creating answer",
-  "generating answer",
-  "wird erstellt",
-];
 
 // ============================================================================
 // Helper Functions
@@ -67,13 +55,6 @@ function hashString(str: string): number {
   return hash;
 }
 
-/**
- * Check if text is a placeholder/loading message
- */
-function isPlaceholder(text: string): boolean {
-  const lower = text.toLowerCase();
-  return PLACEHOLDER_SNIPPETS.some((snippet) => lower.includes(snippet));
-}
 
 // ============================================================================
 // Main Functions
@@ -209,6 +190,23 @@ export async function waitForLatestAnswer(
   while (Date.now() < deadline) {
     pollCount++;
 
+    // Check if NotebookLM is still "thinking" (most reliable indicator)
+    try {
+      const thinkingElement = await page.$('div.thinking-message');
+      if (thinkingElement) {
+        const isVisible = await thinkingElement.isVisible();
+        if (isVisible) {
+          if (debug && pollCount % 5 === 0) {
+            log.debug("🔍 [DEBUG] NotebookLM still thinking (div.thinking-message visible)...");
+          }
+          await page.waitForTimeout(pollIntervalMs);
+          continue;
+        }
+      }
+    } catch {
+      // Ignore errors checking thinking state
+    }
+
     // Extract latest NEW text
     const candidate = await extractLatestText(
       page,
@@ -221,15 +219,6 @@ export async function waitForLatestAnswer(
       const normalized = candidate.trim();
       if (normalized) {
         const lower = normalized.toLowerCase();
-
-        // Check if it's a placeholder
-        if (isPlaceholder(lower)) {
-          if (debug && pollCount % 5 === 0) {
-            log.debug("🔍 [DEBUG] Found placeholder, continuing...");
-          }
-          await page.waitForTimeout(250);
-          continue;
-        }
 
         // Check if it's the question echo
         if (lower === sanitizedQuestion) {

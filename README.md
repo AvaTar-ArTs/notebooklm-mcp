@@ -229,6 +229,50 @@ Fresh start anytime. Scans entire system for NotebookLM data with categorized pr
 
 ---
 
+## Tool Profiles
+
+Reduce token usage by loading only the tools you need. Each tool consumes context tokens — fewer tools = faster responses and lower costs.
+
+### Available Profiles
+
+| Profile | Tools | Use Case |
+|---------|-------|----------|
+| **minimal** | 5 | Query-only: `ask_question`, `get_health`, `list_notebooks`, `select_notebook`, `get_notebook` |
+| **standard** | 10 | + Library management: `setup_auth`, `list_sessions`, `add_notebook`, `update_notebook`, `search_notebooks` |
+| **full** | 16 | All tools including `cleanup_data`, `re_auth`, `remove_notebook`, `reset_session`, `close_session`, `get_library_stats` |
+
+### Configure via CLI
+
+```bash
+# Check current settings
+npx notebooklm-mcp config get
+
+# Set a profile
+npx notebooklm-mcp config set profile minimal
+npx notebooklm-mcp config set profile standard
+npx notebooklm-mcp config set profile full
+
+# Disable specific tools (comma-separated)
+npx notebooklm-mcp config set disabled-tools "cleanup_data,re_auth"
+
+# Reset to defaults
+npx notebooklm-mcp config reset
+```
+
+### Configure via Environment Variables
+
+```bash
+# Set profile
+export NOTEBOOKLM_PROFILE=minimal
+
+# Disable specific tools
+export NOTEBOOKLM_DISABLED_TOOLS="cleanup_data,re_auth,remove_notebook"
+```
+
+Settings are saved to `~/.config/notebooklm-mcp/settings.json` and persist across sessions. Environment variables override file settings.
+
+---
+
 ## Architecture
 
 ```mermaid

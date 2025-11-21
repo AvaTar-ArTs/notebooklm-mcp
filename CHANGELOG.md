@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-11-21
+
+### Added
+- **Tool Profiles System** - Reduce token usage by loading only the tools you need
+  - Three profiles: `minimal` (5 tools), `standard` (10 tools), `full` (16 tools)
+  - Persistent configuration via `~/.config/notebooklm-mcp/settings.json`
+  - Environment variable overrides: `NOTEBOOKLM_PROFILE`, `NOTEBOOKLM_DISABLED_TOOLS`
+
+- **CLI Configuration Commands** - Easy profile management without editing files
+  - `npx notebooklm-mcp config get` - Show current configuration
+  - `npx notebooklm-mcp config set profile <name>` - Set profile (minimal/standard/full)
+  - `npx notebooklm-mcp config set disabled-tools <list>` - Disable specific tools
+  - `npx notebooklm-mcp config reset` - Reset to defaults
+
+### Changed
+- **Modularized Codebase** - Improved maintainability and code organization
+  - Split monolithic `src/tools/index.ts` into `definitions.ts` and `handlers.ts`
+  - Extracted resource handling into dedicated `ResourceHandlers` class
+  - Cleaner separation of concerns throughout the codebase
+
+### Fixed
+- **LibreChat Compatibility** - Fixed "Server does not support completions" error
+  - Added `prompts: {}` and `logging: {}` to server capabilities
+  - Resolves GitHub Issue #3 for LibreChat integration
+
+- **Thinking Message Detection** - Fixed incomplete answers showing placeholder text
+  - Now waits for `div.thinking-message` element to disappear before reading answer
+  - Removed unreliable text-based placeholder detection (`PLACEHOLDER_SNIPPETS`)
+  - Answers like "Reviewing the content..." or "Looking for answers..." no longer returned prematurely
+  - Works reliably across all languages and NotebookLM UI changes
+
 ## [1.1.2] - 2025-10-19
 
 ### Changed
