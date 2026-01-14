@@ -1,10 +1,10 @@
 {
-  "name": "notebooklm-mcp",
-  "version": "1.2.1",
-  "description": "MCP server for NotebookLM API with session support and human-like behavior",
+  "name": "seo-trend-analyzer",
+  "version": "1.0.0",
+  "description": "SEO and trending keyword analysis engine for identifying high-opportunity keywords across niches",
   "type": "module",
   "bin": {
-    "notebooklm-mcp": "dist/index.js"
+    "seo-analyzer": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",
@@ -12,38 +12,20 @@
     "watch": "tsc --watch",
     "dev": "tsx watch src/index.ts",
     "prepare": "npm run build",
-    "test": "tsx src/index.ts"
+    "start": "node dist/index.js"
   },
   "keywords": [
-    "mcp",
-    "notebooklm",
-    "gemini",
-    "ai",
-    "claude"
+    "seo",
+    "keyword-research",
+    "trend-analysis",
+    "redbubble",
+    "marketplace-analysis"
   ],
-  "author": "Gérôme Dexheimer <hello@geromedexheimer.de> (https://github.com/PleasePrompto)",
+  "author": "SEO Trend Analyzer",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PleasePrompto/notebooklm-mcp.git"
-  },
-  "homepage": "https://github.com/PleasePrompto/notebooklm-mcp#readme",
-  "bugs": {
-    "url": "https://github.com/PleasePrompto/notebooklm-mcp/issues"
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "NOTEBOOKLM_USAGE.md",
-    "LICENSE",
-    "docs"
-  ],
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@supabase/supabase-js": "^2.38.0",
     "dotenv": "^16.4.0",
-    "env-paths": "^3.0.0",
-    "globby": "^14.1.0",
-    "patchright": "^1.48.2",
     "zod": "^3.22.0"
   },
   "devDependencies": {
